@@ -48,6 +48,7 @@
 	<com.google.android.material.textfield.TextInputLayout
 		android:id="@+id/nameEditTextLayout"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:hint="@string/name"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="32dp"
@@ -81,6 +82,7 @@
 	<com.google.android.material.textfield.TextInputLayout
 		android:id="@+id/emailEditTextLayout"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:hint="@string/email"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="32dp"
@@ -114,6 +116,7 @@
 	<com.google.android.material.textfield.TextInputLayout
 		android:id="@+id/passwordEditTextLayout"
 		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:hint="@string/password"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="32dp"
@@ -126,8 +129,9 @@
 		app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
 		app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-		<com.google.android.material.textfield.TextInputEditText
+		<com.playdeadrespawn.storyapp.view.MyEditText
 			android:id="@+id/passwordEditText"
+			app:errorEnabled="true"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:ems="10"
