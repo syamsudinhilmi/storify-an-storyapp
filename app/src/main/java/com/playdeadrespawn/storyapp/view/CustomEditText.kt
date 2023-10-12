@@ -6,7 +6,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
-class MyEditText: AppCompatEditText {
+class CustomEditText: AppCompatEditText {
     constructor(context: Context) : super(context) {
         init()
     }

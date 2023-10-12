@@ -10,13 +10,13 @@
 		android:id="@+id/imageView"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:layout_marginStart="32dp"
-		android:layout_marginEnd="32dp"
 		app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/guideline2"
-		app:srcCompat="@drawable/image_signup" />
+		app:layout_constraintTop_toTopOf="parent"
+		app:srcCompat="@drawable/image_signup"
+		android:contentDescription="@string/image_res"/>
+
 
 	<TextView
 		android:id="@+id/titleTextView"
@@ -26,7 +26,6 @@
 		android:layout_marginTop="16dp"
 		android:layout_marginEnd="32dp"
 		android:text="@string/title_signup_page"
-		android:textColor="@color/black"
 		android:textSize="20sp"
 		android:textStyle="bold"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +40,6 @@
 		android:layout_marginStart="32dp"
 		android:layout_marginTop="8dp"
 		android:text="@string/name"
-		android:textColor="@color/black"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
@@ -58,7 +56,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/nameTextView"
-		app:startIconDrawable="@drawable/ic_baseline_person_24">
+		app:startIconDrawable="@drawable/ic_person">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/nameEditText"
@@ -75,7 +73,6 @@
 		android:layout_marginStart="32dp"
 		android:layout_marginTop="16dp"
 		android:text="@string/email"
-		android:textColor="@color/black"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout" />
 
@@ -92,7 +89,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/emailTextView"
-		app:startIconDrawable="@drawable/ic_baseline_email_24">
+		app:startIconDrawable="@drawable/ic_email">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/emailEditText"
@@ -109,7 +106,6 @@
 		android:layout_marginStart="32dp"
 		android:layout_marginTop="8dp"
 		android:text="@string/password"
-		android:textColor="@color/black"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout" />
 
@@ -127,9 +123,9 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
-		app:startIconDrawable="@drawable/ic_baseline_lock_24">
+		app:startIconDrawable="@drawable/ic_lock">
 
-		<com.playdeadrespawn.storyapp.view.MyEditText
+		<com.playdeadrespawn.storyapp.view.CustomEditText
 			android:id="@+id/passwordEditText"
 			app:errorEnabled="true"
 			android:layout_width="match_parent"
@@ -145,7 +141,8 @@
 		android:layout_marginStart="32dp"
 		android:layout_marginTop="32dp"
 		android:layout_marginEnd="32dp"
-		android:backgroundTint="@color/navy"
+		android:backgroundTint="@color/yellow"
+		android:textColor="@color/navy"
 		android:text="@string/signup"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +154,7 @@
 		android:layout_height="64dp"
 		android:orientation="horizontal"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintGuide_percent="0.30191082"
+		app:layout_constraintGuide_percent="0.45"
 		app:layout_constraintStart_toStartOf="parent" />
 
 	<androidx.constraintlayout.widget.Guideline
