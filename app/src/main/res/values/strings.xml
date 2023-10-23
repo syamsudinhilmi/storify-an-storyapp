@@ -16,4 +16,5 @@
 	<string name="error">Error</string>
 	<string name="image_res"><![CDATA[signup image: \"https://storyset.com/work\">Work illustrations by Storyset]]></string>
 	<string name="storify_logo">Storify Logo</string>
+	<string name="error_password">Password tidak boleh kurang dari 8 karakter</string>
 </resources>

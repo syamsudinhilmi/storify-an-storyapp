@@ -2,16 +2,23 @@ package com.playdeadrespawn.storyapp.view.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.playdeadrespawn.storyapp.databinding.ActivitySignupBinding
+import com.playdeadrespawn.storyapp.view.AuthViewModel
+import com.playdeadrespawn.storyapp.view.ViewModelFactory
 
 class SignupActivity : AppCompatActivity() {
+    private val viewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +29,8 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+
+
     }
 
     private fun setupView() {
@@ -39,18 +48,32 @@ class SignupActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.signupButton.setOnClickListener {
+            val name = binding.nameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
 
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
-                }
-                create()
-                show()
-            }
+            viewModel.registerSession(name, email, password)
         }
+        viewModel.register.observe(this , Observer { isSuccessful ->
+            if (isSuccessful) {
+                val email = binding.emailEditText.text.toString()
+                androidx.appcompat.app.AlertDialog.Builder(this@SignupActivity).apply {
+                    setTitle("Selamat!")
+                    setMessage("Akun dengan $email sudah jadi nih. Silahkan lanjut Login.")
+                    setPositiveButton("Lanjut") { _, _ ->
+                        finish()
+                    }
+                    create()
+                    show()
+                }
+            } else {
+                AlertDialog.Builder(this)
+                    .setTitle("Signup Gagal")
+                    .setMessage("Terdapat error saat signup. Coba ulangi lagi!.")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
+        })
     }
 
     private fun playAnimation() {

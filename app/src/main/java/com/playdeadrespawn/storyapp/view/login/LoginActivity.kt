@@ -11,13 +11,15 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import com.playdeadrespawn.storyapp.data.pref.UserModel
 import com.playdeadrespawn.storyapp.databinding.ActivityLoginBinding
+import com.playdeadrespawn.storyapp.view.AuthViewModel
 import com.playdeadrespawn.storyapp.view.ViewModelFactory
 import com.playdeadrespawn.storyapp.view.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel by viewModels<LoginViewModel> {
+    private val viewModel by viewModels<AuthViewModel> {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityLoginBinding
@@ -48,20 +50,32 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
-                }
-                create()
-                show()
-            }
+            val password = binding.passwordEditText.text.toString()
+
+            viewModel.loginSession(email, password)
         }
+        viewModel.login.observe(this, Observer { isSuccessful ->
+            if (isSuccessful) {
+                AlertDialog.Builder(this@LoginActivity).apply {
+                    setTitle("Selamat!")
+                    setMessage("Anda berhasil login. Silahkan menggunakan aplikasi ini.")
+                    setPositiveButton("Lanjut") { _, _ ->
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    create()
+                    show()
+                }
+            } else {
+                AlertDialog.Builder(this)
+                    .setTitle("Login Gagal")
+                    .setMessage("Email atau password tidak sesuai. Coba ulangi lagi!.")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
+        })
     }
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
@@ -81,9 +95,4 @@ class LoginActivity : AppCompatActivity() {
             start()
         }
     }
-
-
-
-
-
 }
