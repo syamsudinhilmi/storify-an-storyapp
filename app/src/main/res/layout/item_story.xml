@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginStart="32dp"
+	android:layout_marginEnd="32dp"
+	android:layout_marginTop="16dp"
+	android:layout_marginBottom="16dp"
+	app:cardCornerRadius="8dp">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+
+		<ImageView
+			android:id="@+id/iv_story"
+			android:layout_width="match_parent"
+			android:layout_height="200dp"
+			android:scaleType="centerCrop"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_user"
+			tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+		<TextView
+			android:id="@+id/tv_user"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:padding="8dp"
+			android:textSize="16sp"
+			android:textStyle="bold"
+
+
+			app:layout_constraintBottom_toTopOf="@+id/iv_story"
+			app:layout_constraintEnd_toEndOf="@+id/iv_story"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="@string/username" />
+
+
+		<TextView
+			android:id="@+id/tv_date"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:textStyle="italic"
+			android:gravity="end"
+			android:padding="8dp"
+			android:textSize="16sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="@+id/tv_description"
+			app:layout_constraintTop_toBottomOf="@+id/tv_description"
+			tools:text="@string/date" />
+
+		<TextView
+			android:id="@+id/tv_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ellipsize="end"
+			android:maxLines="1"
+			android:padding="8dp"
+			android:textSize="16sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="@+id/iv_story"
+			app:layout_constraintTop_toBottomOf="@+id/iv_story"
+			tools:text="@string/description" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

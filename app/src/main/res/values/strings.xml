@@ -1,20 +1,38 @@
 <resources>
 	<string name="app_name">Storify</string>
+	<string name="image_res"><![CDATA[signup image: \"https://storyset.com/work\">Work illustrations by Storyset]]></string>
+
+
 	<string name="signup">Daftar</string>
 	<string name="login">Masuk</string>
 	<string name="message_welcome_page">Mau sharing cerita-cerita terbaikmu? Di Storify aja!</string>
 	<string name="title_welcome_page">Selamat datang di Storify!</string>
 	<string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
+
+	<string name="name">Nama</string>
+	<string name="input_name">Masukkan Nama Anda</string>
 	<string name="email">Email</string>
+	<string name="input_email">Masukkan Email Anda</string>
 	<string name="password">Password</string>
+	<string name="input_password">Masukkan Password Anda</string>
+
+
 	<string name="message_login_page">Masukkan dulu datamu ya</string>
 	<string name="title_login_page">Sudah siap untuk menjelajah?</string>
-	<string name="name">Nama</string>
+
 	<string name="message_main_page">Selamat Datang di Storify.</string>
 	<string name="greeting">Halo %1$s,</string>
 	<string name="logout">Keluar</string>
 	<string name="error">Error</string>
-	<string name="image_res"><![CDATA[signup image: \"https://storyset.com/work\">Work illustrations by Storyset]]></string>
+
 	<string name="storify_logo">Storify Logo</string>
 	<string name="error_password">Password tidak boleh kurang dari 8 karakter</string>
+	<string name="username">Username</string>
+	<string name="description">Deskripsi</string>
+	<string name="date">Date</string>
+	<string name="detail_story">Story</string>
+	<string name="camera">Kamera</string>
+	<string name="gallery">Galeri</string>
+	<string name="upload">Unggah</string>
+
 </resources>

@@ -8,17 +8,16 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.playdeadrespawn.storyapp.data.pref.UserPreference
+import com.playdeadrespawn.storyapp.data.pref.dataStore
 import com.playdeadrespawn.storyapp.databinding.ActivitySignupBinding
 import com.playdeadrespawn.storyapp.view.AuthViewModel
 import com.playdeadrespawn.storyapp.view.ViewModelFactory
 
 class SignupActivity : AppCompatActivity() {
-    private val viewModel by viewModels<AuthViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
+    private lateinit var viewModel: AuthViewModel
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +28,6 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
-
-
     }
 
     private fun setupView() {
@@ -44,6 +41,11 @@ class SignupActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
+
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreference.getInstance(dataStore))
+        )[AuthViewModel::class.java]
     }
 
     private fun setupAction() {
@@ -52,12 +54,14 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
+            showLoading(true)
             viewModel.registerSession(name, email, password)
         }
-        viewModel.register.observe(this , Observer { isSuccessful ->
-            if (isSuccessful) {
+        viewModel.register.observe(this) {
+            if (it) {
+                showLoading(false)
                 val email = binding.emailEditText.text.toString()
-                androidx.appcompat.app.AlertDialog.Builder(this@SignupActivity).apply {
+                AlertDialog.Builder(this@SignupActivity).apply {
                     setTitle("Selamat!")
                     setMessage("Akun dengan $email sudah jadi nih. Silahkan lanjut Login.")
                     setPositiveButton("Lanjut") { _, _ ->
@@ -67,13 +71,14 @@ class SignupActivity : AppCompatActivity() {
                     show()
                 }
             } else {
-                AlertDialog.Builder(this)
+                showLoading(false)
+                androidx.appcompat.app.AlertDialog.Builder(this@SignupActivity)
                     .setTitle("Signup Gagal")
-                    .setMessage("Terdapat error saat signup. Coba ulangi lagi!.")
+                    .setMessage("Email atau password tidak sesuai. Coba ulangi lagi!.")
                     .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
                     .show()
             }
-        })
+        }
     }
 
     private fun playAnimation() {
@@ -94,5 +99,9 @@ class SignupActivity : AppCompatActivity() {
             playSequentially(sequence)
             start()
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

@@ -1,13 +1,14 @@
 package com.playdeadrespawn.storyapp.view
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.playdeadrespawn.storyapp.data.UserRepository
-import com.playdeadrespawn.storyapp.di.Injection
+import com.playdeadrespawn.storyapp.data.pref.UserPreference
 import com.playdeadrespawn.storyapp.view.main.MainViewModel
+import com.playdeadrespawn.storyapp.view.storyadd.StoryAddViewModel
 
-class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory(
+    private val repository: UserPreference,
+) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
@@ -17,20 +18,10 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
                 AuthViewModel(repository) as T
             }
-            else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
-        }
-    }
-    companion object {
-        @Volatile
-        private var INSTANCE: ViewModelFactory? = null
-        @JvmStatic
-        fun getInstance(context: Context): ViewModelFactory {
-            if (INSTANCE == null) {
-                synchronized(ViewModelFactory::class.java) {
-                    INSTANCE = ViewModelFactory(Injection.provideRepository(context))
-                }
+            modelClass.isAssignableFrom(StoryAddViewModel::class.java) -> {
+                StoryAddViewModel(repository) as T
             }
-            return INSTANCE as ViewModelFactory
+            else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
 }

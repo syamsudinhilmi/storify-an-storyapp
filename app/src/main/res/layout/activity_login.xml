@@ -1,149 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".view.login.LoginActivity">
 
-	<ImageView
-		android:id="@+id/imageView"
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/image_login"
-		android:contentDescription="@string/image_res"/>
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 
-	<TextView
-		android:id="@+id/titleTextView"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginTop="16dp"
-		android:layout_marginEnd="32dp"
-		android:text="@string/title_login_page"
-		android:textSize="20sp"
-		android:textStyle="bold"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal" />
-
-	<TextView
-		android:id="@+id/messageTextView"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginEnd="32dp"
-		android:text="@string/message_login_page"
-		android:textSize="16sp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="1.0"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
-
-	<TextView
-		android:id="@+id/emailTextView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginTop="24dp"
-		android:text="@string/email"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/messageTextView" />
-
-	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/emailEditTextLayout"
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-		android:hint="@string/email"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginEnd="32dp"
-		android:alpha="0"
-		tools:alpha="100"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/emailTextView"
-		app:startIconDrawable="@drawable/ic_email">
-
-		<com.playdeadrespawn.storyapp.view.customview.EmailEditText
-			android:id="@+id/emailEditText"
-			app:errorEnabled="true"
+		<com.google.android.material.progressindicator.LinearProgressIndicator
+			android:id="@+id/loadingIndicator"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:ems="10"
-			android:inputType="textEmailAddress" />
-	</com.google.android.material.textfield.TextInputLayout>
+			android:indeterminate="true"
+			android:visibility="gone"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
 
-	<TextView
-		android:id="@+id/passwordTextView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginTop="8dp"
-		android:text="@string/password"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout" />
+		<ImageView
+			android:id="@+id/imageView"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/image_login"
+			android:contentDescription="@string/image_res"/>
 
-	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/passwordEditTextLayout"
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-		android:hint="@string/password"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="32dp"
-		android:layout_marginEnd="32dp"
-		app:endIconMode="password_toggle"
-		android:alpha="0"
-		tools:alpha="100"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
-		app:startIconDrawable="@drawable/ic_lock">
-
-		<com.playdeadrespawn.storyapp.view.customview.PasswordEditText
-			android:id="@+id/passwordEditText"
-			app:errorEnabled="true"
-			android:layout_width="match_parent"
+		<TextView
+			android:id="@+id/titleTextView"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:ems="10"
-			android:inputType="textPassword" />
-	</com.google.android.material.textfield.TextInputLayout>
+			android:layout_marginStart="32dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginEnd="32dp"
+			android:text="@string/title_login_page"
+			android:textSize="20sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintHorizontal_bias="0.0"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal" />
 
-	<Button
-		android:id="@+id/loginButton"
-		android:layout_width="0dp"
-		android:layout_height="64dp"
-		android:layout_marginStart="32dp"
-		android:layout_marginTop="32dp"
-		android:layout_marginEnd="32dp"
-		android:backgroundTint="@color/yellow"
-		android:textColor="@color/navy"
-		android:text="@string/login"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
+		<TextView
+			android:id="@+id/messageTextView"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginEnd="32dp"
+			android:text="@string/message_login_page"
+			android:textSize="16sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintHorizontal_bias="1.0"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-	<androidx.constraintlayout.widget.Guideline
-		android:id="@+id/guidelineHorizontal"
-		android:layout_width="wrap_content"
-		android:layout_height="64dp"
-		android:orientation="horizontal"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintGuide_percent="0.4"
-		app:layout_constraintStart_toStartOf="parent" />
+		<TextView
+			android:id="@+id/emailTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginTop="24dp"
+			android:text="@string/email"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/messageTextView" />
 
-	<androidx.constraintlayout.widget.Guideline
-		android:id="@+id/guidelineHorizontal2"
-		android:layout_width="wrap_content"
-		android:layout_height="64dp"
-		android:orientation="horizontal"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintGuide_percent="0.1"
-		app:layout_constraintStart_toStartOf="parent" />
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/emailEditTextLayout"
+			style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+			android:hint="@string/input_email"
+			app:errorEnabled="true"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginEnd="32dp"
+			android:alpha="0"
+			tools:alpha="100"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/emailTextView"
+			app:startIconDrawable="@drawable/ic_email">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+			<com.playdeadrespawn.storyapp.view.customview.EmailEditText
+				android:id="@+id/emailEditText"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:inputType="textEmailAddress" />
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<TextView
+			android:id="@+id/passwordTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginTop="8dp"
+			android:text="@string/password"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/passwordEditTextLayout"
+			style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+			android:hint="@string/input_password"
+			app:errorEnabled="true"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="32dp"
+			android:layout_marginEnd="32dp"
+			app:endIconMode="password_toggle"
+			android:alpha="0"
+			tools:alpha="100"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
+			app:startIconDrawable="@drawable/ic_lock">
+
+			<com.playdeadrespawn.storyapp.view.customview.PasswordEditText
+				android:id="@+id/passwordEditText"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:inputType="textPassword" />
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<Button
+			android:id="@+id/loginButton"
+			android:layout_width="0dp"
+			android:layout_height="64dp"
+			android:layout_marginStart="32dp"
+			android:layout_marginTop="32dp"
+			android:layout_marginEnd="32dp"
+			android:backgroundTint="@color/yellow"
+			android:textColor="@color/black"
+			android:text="@string/login"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
+
+		<androidx.constraintlayout.widget.Guideline
+			android:id="@+id/guidelineHorizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="64dp"
+			android:orientation="horizontal"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintGuide_percent="0.4"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<androidx.constraintlayout.widget.Guideline
+			android:id="@+id/guidelineHorizontal2"
+			android:layout_width="wrap_content"
+			android:layout_height="64dp"
+			android:orientation="horizontal"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintGuide_percent="0.1"
+			app:layout_constraintStart_toStartOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
