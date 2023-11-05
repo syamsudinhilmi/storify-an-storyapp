@@ -13,7 +13,7 @@ import com.playdeadrespawn.storyapp.view.detail.DetailStory
 import java.util.Locale
 
 
-class StoryAdapter(private val listStory: ArrayList<ListStoryItem>): RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryAdapter(private val listStory: List<ListStoryItem>): RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 
     class StoryViewHolder(private val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ListStoryItem) {

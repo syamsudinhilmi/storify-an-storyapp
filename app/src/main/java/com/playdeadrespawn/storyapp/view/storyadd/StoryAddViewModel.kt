@@ -25,7 +25,7 @@ class StoryAddViewModel(private val repository: UserPreference) : ViewModel() {
     }
 
     fun newStory(token: String, imageFile: File, description: String) {
-        val description = description.toRequestBody("text/plain".toMediaType())
+        val desc = description.toRequestBody("text/plain".toMediaType())
         val reqImageFile = imageFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData(
             "photo",
@@ -33,7 +33,7 @@ class StoryAddViewModel(private val repository: UserPreference) : ViewModel() {
             reqImageFile
         )
 
-        val client = ApiConfig.getApiService().newStory("Bearer $token", imagePart, description)
+        val client = ApiConfig.getApiService().newStory("Bearer $token", imagePart, desc)
         client.enqueue(object : Callback<AddNewStoryResponse> {
             override fun onResponse(call: Call<AddNewStoryResponse>, response: Response<AddNewStoryResponse>) {
                 when (response.code()) {

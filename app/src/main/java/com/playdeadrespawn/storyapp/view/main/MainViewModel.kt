@@ -38,9 +38,9 @@ class MainViewModel(private val repository: UserPreference) : ViewModel() {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful){
                     _listStory.value = response.body()?.listStory
-                    Log.e(TAG, "onResponse: ${response.body()?.message}")
+                    Log.e(TAG, "isSuccess: ${response.body()?.message}")
                 } else {
-                    Log.e(TAG, "onResponse: ${response.body()?.message}")
+                    Log.e(TAG, "onFailure: ${response.body()?.message}")
                 }
             }
 

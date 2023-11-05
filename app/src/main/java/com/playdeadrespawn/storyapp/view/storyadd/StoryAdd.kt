@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,15 +40,39 @@ class StoryAdd : AppCompatActivity() {
         )[StoryAddViewModel::class.java]
 
         if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS)
+                REQUEST_CODE_PERMISSIONS
+            )
         }
 
         binding.apply {
             galleryButton.setOnClickListener { openGallery() }
             cameraButton.setOnClickListener { openCamera() }
-            uploadButton.setOnClickListener { handleUploadClick() }
+            uploadButton.setOnClickListener {
+                getFile?.let { file ->
+                    val description = binding.descEditText.text.toString()
+                    if (description.isNotEmpty()) {
+                        viewModel.getSession().observe(this@StoryAdd) { user ->
+                            viewModel.newStory(user.token, reduceFileImage(file), description)
+                            AlertDialog.Builder(this@StoryAdd).apply {
+                                setMessage("Story Berhasil Ditambahkan")
+                                setPositiveButton("Ok") { _, _ ->
+                                    val intent = Intent(context, MainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                create()
+                                show()
+                            }
+                        }
+                    } else {
+                        showToast("Deskripsi tidak boleh kosong")
+                    }
+                } ?: showToast("Gambar tidak boleh kosong")
+            }
         }
     }
 
@@ -85,24 +110,6 @@ class StoryAdd : AppCompatActivity() {
                 }
             }
         }
-
-    private fun handleUploadClick() {
-        getFile?.let { file ->
-            val description = binding.descEditText.text.toString()
-            if (description.isNotEmpty()) {
-                viewModel.getSession().observe(this@StoryAdd) { user ->
-                    viewModel.newStory(user.token, reduceFileImage(file), description)
-                    showToast("Story berhasil ditambahkan")
-                    val intent = Intent(this@StoryAdd, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                }
-            } else {
-                showToast("Deskripsi tidak boleh kosong")
-            }
-        } ?: showToast("Gambar tidak boleh kosong")
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
