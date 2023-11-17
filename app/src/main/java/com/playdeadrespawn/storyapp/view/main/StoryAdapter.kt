@@ -1,21 +1,23 @@
 package com.playdeadrespawn.storyapp.view.main
 
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
-import android.net.ParseException
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.playdeadrespawn.storyapp.data.response.ListStoryItem
 import com.playdeadrespawn.storyapp.databinding.ItemStoryBinding
+import com.playdeadrespawn.storyapp.utils.getAddress
+import com.playdeadrespawn.storyapp.utils.withDateFormat
 import com.playdeadrespawn.storyapp.view.detail.DetailStory
-import java.util.Locale
 
 
-class StoryAdapter(private val listStory: List<ListStoryItem>): RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryAdapter: PagingDataAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
-    class StoryViewHolder(private val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
+    class StoryViewHolder(private val binding: ItemStoryBinding
+    ): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ListStoryItem) {
             Glide.with(binding.root.context)
                 .load(data.photoUrl)
@@ -23,17 +25,7 @@ class StoryAdapter(private val listStory: List<ListStoryItem>): RecyclerView.Ada
 
             binding.tvUser.text = data.name
             binding.tvDescription.text = data.description
-            val oldFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.UK)
-            val newFormat = SimpleDateFormat("dd MMMM yyyy", Locale.UK)
-
-            try {
-                val date = oldFormat.parse(data.createdAt)
-                val formattedDate = newFormat.format(date)
-                binding.tvDate.text = formattedDate
-            } catch (e: ParseException) {
-                e.printStackTrace()
-                binding.tvDate.text = data.createdAt
-            }
+            binding.tvDate.text = data.createdAt.withDateFormat()
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailStory::class.java)
@@ -41,6 +33,8 @@ class StoryAdapter(private val listStory: List<ListStoryItem>): RecyclerView.Ada
                 intent.putExtra(DetailStory.CREATE_AT, data.createdAt)
                 intent.putExtra(DetailStory.DESCRIPTION, data.description)
                 intent.putExtra(DetailStory.PHOTO_URL, data.photoUrl)
+                intent.putExtra(DetailStory.LONGITUDE, data.lon.toString())
+                intent.putExtra(DetailStory.LATITUDE, data.lat.toString())
                 itemView.context.startActivity(intent)
             }
         }
@@ -49,9 +43,23 @@ class StoryAdapter(private val listStory: List<ListStoryItem>): RecyclerView.Ada
         val view = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StoryViewHolder(view)
     }
-    override fun getItemCount(): Int = listStory.size
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        holder.bind(listStory[position])
+        val data = getItem(position)
+        if (data != null) {
+            holder.bind(data)
+        }
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }

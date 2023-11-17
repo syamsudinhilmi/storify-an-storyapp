@@ -5,10 +5,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,12 +21,16 @@ import com.playdeadrespawn.storyapp.data.pref.UserPreference
 import com.playdeadrespawn.storyapp.data.pref.dataStore
 import com.playdeadrespawn.storyapp.data.response.ListStoryItem
 import com.playdeadrespawn.storyapp.databinding.ActivityMainBinding
+import com.playdeadrespawn.storyapp.utils.getAddress
 import com.playdeadrespawn.storyapp.view.ViewModelFactory
+import com.playdeadrespawn.storyapp.view.map.MapsActivity
 import com.playdeadrespawn.storyapp.view.storyadd.StoryAdd
 import com.playdeadrespawn.storyapp.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModels<MainViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,22 +38,29 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory(UserPreference.getInstance(dataStore)))[MainViewModel::class.java]
+        val adapter = StoryAdapter()
 
         viewModel.getSession().observe(this) { user ->
-            if (user.userId.isEmpty()) {
+            if (user.token.isEmpty()) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else {
-                viewModel.getStory(user.token)
+                binding.rvStory.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingAdapter {
+                        adapter.retry()
+                    }
+                )
+                viewModel.getStory(user.token).observe(this) {
+//                    Toast.makeText(this, user.token, Toast.LENGTH_SHORT).show()
+                    Log.e("List", it.toString())
+                    adapter.submitData(lifecycle, it)
+                }
             }
         }
 
-        binding.rvStory.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            addItemDecoration(DividerItemDecoration(this@MainActivity, (layoutManager as LinearLayoutManager).orientation))
-            viewModel.listStory.observe(this@MainActivity) {adapter = StoryAdapter(it as ArrayList<ListStoryItem>)}
-        }
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStory.layoutManager = layoutManager
+
         binding.fabAddStory.setOnClickListener {
             startActivity(Intent(this, StoryAdd::class.java))
         }
@@ -63,7 +77,6 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FFD600")))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -73,6 +86,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.map -> {
+                startActivity(Intent(this, MapsActivity::class.java))
+            }
             R.id.logout -> viewModel.logout()
         }
         return super.onOptionsItemSelected(item)

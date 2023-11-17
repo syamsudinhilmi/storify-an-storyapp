@@ -34,5 +34,30 @@
 	<string name="camera">Kamera</string>
 	<string name="gallery">Galeri</string>
 	<string name="upload">Unggah</string>
+	<string name="timeout">Timeout</string>
+	<string name="try_again">Coba Lagi</string>
+	<string name="title_activity_maps">MapsActivity</string>
+	<string name="map">Map</string>
+	<string name="my_place">Lokasi saya</string>
+	<string name="maps_location">Lokasi Story</string>
+	<string name="add_story">Upload Story</string>
+	<string name="tidak_mendapatkan_permission">Tidak mendapatkan permission.</string>
+	<string name="gambar_tidak_boleh_kosong">Gambar tidak boleh kosong</string>
+	<string name="deskripsi_tidak_boleh_kosong">Deskripsi tidak boleh kosong</string>
+	<string name="story_berhasil_ditambahkan">Story Berhasil Ditambahkan</string>
+	<string name="selamat">Selamat!</string>
+	<string name="succes_login">Anda berhasil login. Silahkan menggunakan aplikasi ini.</string>
+	<string name="error_login">Login Gagal</string>
+	<string name="error_email">Email atau password tidak sesuai. Coba ulangi lagi!.</string>
+	<string name="email_tidak_boleh_kosong">Email tidak boleh kosong!</string>
+	<string name="succes_signup">Akun dengan %1$s sudah jadi nih. Silahkan lanjut Login.</string>
+	<string name="lanjut">Lanjut</string>
+	<string name="signup_gagal">Signup Gagal</string>
+	<string name="error_signup">Terjadi kesalahan! Coba ulangi lagi!</string>
+	<string name="gagal_mengambil_gambar">Gagal mengambil gambar.</string>
+	<string name="gagal_memunculkan_kamera">Gagal memunculkan kamera.</string>
+	<string name="style_parsing_failed">Style parsing failed.</string>
+	<string name="can_t_find_style_error">"Can't find style. Error: "</string>
+	<string name="empty_password">Password tidak boleh kosong!\n</string>
 
 </resources>

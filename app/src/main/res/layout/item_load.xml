@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:padding="8dp">
+
+	<TextView
+		android:id="@+id/error_msg"
+		android:layout_marginTop="16dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:textAlignment="center"
+		tools:text="@string/timeout" />
+
+	<com.google.android.material.progressindicator.LinearProgressIndicator
+		android:id="@+id/loadingIndicator"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"
+		android:visibility="gone" />
+
+	<Button
+		android:id="@+id/retryButton"
+		android:layout_marginTop="16dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:text="@string/try_again"
+		android:backgroundTint="@color/yellow"
+		android:textColor="@color/black"/>
+
+</LinearLayout>

@@ -10,6 +10,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.playdeadrespawn.storyapp.R
 import com.playdeadrespawn.storyapp.databinding.ActivityCameraBinding
 import com.playdeadrespawn.storyapp.utils.createFile
 
@@ -50,7 +51,7 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    showToast("Gagal mengambil gambar.")
+                    showToast(getString(R.string.gagal_mengambil_gambar))
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
@@ -89,7 +90,7 @@ class CameraActivity : AppCompatActivity() {
                     imageCapture
                 )
             } catch (exc: Exception) {
-                showToast("Gagal memunculkan kamera.")
+                showToast(getString(R.string.gagal_memunculkan_kamera))
             }
         }, ContextCompat.getMainExecutor(this))
     }

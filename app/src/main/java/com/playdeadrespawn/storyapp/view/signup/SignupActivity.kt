@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.playdeadrespawn.storyapp.R
 import com.playdeadrespawn.storyapp.data.pref.UserPreference
 import com.playdeadrespawn.storyapp.data.pref.dataStore
 import com.playdeadrespawn.storyapp.databinding.ActivitySignupBinding
@@ -17,7 +19,9 @@ import com.playdeadrespawn.storyapp.view.AuthViewModel
 import com.playdeadrespawn.storyapp.view.ViewModelFactory
 
 class SignupActivity : AppCompatActivity() {
-    private lateinit var viewModel: AuthViewModel
+    private val viewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +46,6 @@ class SignupActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[AuthViewModel::class.java]
     }
 
     private fun setupAction() {
@@ -55,28 +55,30 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             showLoading(true)
-            viewModel.registerSession(name, email, password)
-        }
-        viewModel.register.observe(this) {
-            if (it) {
-                showLoading(false)
-                val email = binding.emailEditText.text.toString()
-                AlertDialog.Builder(this@SignupActivity).apply {
-                    setTitle("Selamat!")
-                    setMessage("Akun dengan $email sudah jadi nih. Silahkan lanjut Login.")
-                    setPositiveButton("Lanjut") { _, _ ->
-                        finish()
+            viewModel.registerSession(name, email, password).observe(this){
+                if (it.message == "201") {
+                    showLoading(false)
+                    AlertDialog.Builder(this@SignupActivity).apply {
+                        setTitle(getString(R.string.selamat))
+                        setMessage(
+                            getString(
+                                R.string.succes_signup,
+                                email
+                            ))
+                        setPositiveButton(getString(R.string.lanjut)) { _, _ ->
+                            finish()
+                        }
+                        create()
+                        show()
                     }
-                    create()
-                    show()
+                } else if(it.message == "400") {
+                    showLoading(false)
+                    androidx.appcompat.app.AlertDialog.Builder(this@SignupActivity)
+                        .setTitle(getString(R.string.signup_gagal))
+                        .setMessage(getString(R.string.error_signup))
+                        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                        .show()
                 }
-            } else {
-                showLoading(false)
-                androidx.appcompat.app.AlertDialog.Builder(this@SignupActivity)
-                    .setTitle("Signup Gagal")
-                    .setMessage("Email atau password tidak sesuai. Coba ulangi lagi!.")
-                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                    .show()
             }
         }
     }

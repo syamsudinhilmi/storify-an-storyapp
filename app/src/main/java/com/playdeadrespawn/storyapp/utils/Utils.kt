@@ -2,26 +2,36 @@ package com.playdeadrespawn.storyapp.utils
 
 import android.app.Application
 import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.playdeadrespawn.storyapp.R
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 private const val FILENAME_FORMAT = "dd-MMM-yyyy"
 
-val timeStamp: String = java.text.SimpleDateFormat(
+val timeStamp: String = SimpleDateFormat(
     FILENAME_FORMAT,
     Locale.US
 ).format(System.currentTimeMillis())
+
+// Untuk kasus Intent Camera
 fun createCustomTempFile(context: Context): File {
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(timeStamp, ".jpg", storageDir)
@@ -46,7 +56,7 @@ fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {
         Bitmap.createBitmap(bitmap, 0, 0, bitmap.width ,bitmap.height, matrix,  true)
     } else {
         matrix.postRotate(-90f)
-        matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f)
+        matrix.postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f) // flip gambar
         Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 }
@@ -79,4 +89,26 @@ fun reduceFileImage(file: File): File {
     } while (streamLength > 1000000)
     bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
+}
+
+fun String.withDateFormat(): String {
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    format.timeZone = TimeZone.getTimeZone("UTC")
+    val date = format.parse(this) as Date
+    return DateFormat.getDateInstance(DateFormat.FULL).format(date)
+}
+
+fun getAddress(context: Context, lat: Double, lon: Double): String? {
+    var addressName: String? = null
+    val geocoder = Geocoder(context, Locale.getDefault())
+    try {
+        val list = geocoder.getFromLocation(lat, lon, 1)
+        if (list != null && list.size != 0) {
+            addressName = list[0].getAddressLine(0)
+            Log.d(ContentValues.TAG, "getAddressName: $addressName")
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return addressName
 }

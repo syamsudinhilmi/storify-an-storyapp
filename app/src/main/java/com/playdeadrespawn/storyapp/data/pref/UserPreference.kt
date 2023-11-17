@@ -6,27 +6,28 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.playdeadrespawn.storyapp.data.response.LoginResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore("session")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
-    suspend fun saveSession(user: UserModel) {
+    suspend fun saveSession(name: String, userId: String, token: String) {
         dataStore.edit { preferences ->
-            preferences[NAME_KEY] = user.name
-            preferences[TOKEN_KEY] = user.token
-            preferences[USERID_KEY] = user.userId
+            preferences[NAME_KEY] = name
+            preferences[USERID_KEY] = userId
+            preferences[TOKEN_KEY] = token
         }
     }
 
-    fun getSession(): Flow<UserModel> {
+    fun getSession(): Flow<LoginResult> {
         return dataStore.data.map { preferences ->
-            UserModel(
+            LoginResult(
                 preferences[NAME_KEY] ?: "",
-                preferences[TOKEN_KEY] ?: "",
                 preferences[USERID_KEY] ?: "",
+                preferences[TOKEN_KEY] ?:"",
             )
         }
     }
@@ -42,8 +43,8 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         private var INSTANCE: UserPreference? = null
 
         private val NAME_KEY = stringPreferencesKey("name")
-        private val TOKEN_KEY = stringPreferencesKey("token")
         private val USERID_KEY = stringPreferencesKey("userId")
+        private val TOKEN_KEY = stringPreferencesKey("token")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {

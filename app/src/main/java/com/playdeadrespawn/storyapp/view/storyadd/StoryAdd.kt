@@ -7,13 +7,12 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import com.playdeadrespawn.storyapp.data.pref.UserPreference
-import com.playdeadrespawn.storyapp.data.pref.dataStore
+import com.playdeadrespawn.storyapp.R
 import com.playdeadrespawn.storyapp.databinding.ActivityStoryAddBinding
 import com.playdeadrespawn.storyapp.utils.reduceFileImage
 import com.playdeadrespawn.storyapp.utils.rotateBitmap
@@ -23,8 +22,13 @@ import com.playdeadrespawn.storyapp.view.main.MainActivity
 import java.io.File
 
 class StoryAdd : AppCompatActivity() {
+    private val viewModel by viewModels<StoryAddViewModel>() {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivityStoryAddBinding
-    private lateinit var viewModel: StoryAddViewModel
+    private var lon = 0.0
+    private var lat = 0.0
+
     private var getFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +36,9 @@ class StoryAdd : AppCompatActivity() {
         binding = ActivityStoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+        supportActionBar?.title = getString(R.string.add_story)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[StoryAddViewModel::class.java]
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -55,9 +56,9 @@ class StoryAdd : AppCompatActivity() {
                     val description = binding.descEditText.text.toString()
                     if (description.isNotEmpty()) {
                         viewModel.getSession().observe(this@StoryAdd) { user ->
-                            viewModel.newStory(user.token, reduceFileImage(file), description)
+                            viewModel.newStory(user.token, reduceFileImage(file), description, lon.toString(), lat.toString())
                             AlertDialog.Builder(this@StoryAdd).apply {
-                                setMessage("Story Berhasil Ditambahkan")
+                                setMessage(getString(R.string.story_berhasil_ditambahkan))
                                 setPositiveButton("Ok") { _, _ ->
                                     val intent = Intent(context, MainActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -69,9 +70,9 @@ class StoryAdd : AppCompatActivity() {
                             }
                         }
                     } else {
-                        showToast("Deskripsi tidak boleh kosong")
+                        showToast(getString(R.string.deskripsi_tidak_boleh_kosong))
                     }
-                } ?: showToast("Gambar tidak boleh kosong")
+                } ?: showToast(getString(R.string.gambar_tidak_boleh_kosong))
             }
         }
     }
@@ -118,7 +119,7 @@ class StoryAdd : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS && !allPermissionsGranted()) {
-            showToast("Tidak mendapatkan permission.")
+            showToast(getString(R.string.tidak_mendapatkan_permission))
             finish()
         }
     }
@@ -129,6 +130,10 @@ class StoryAdd : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     companion object {

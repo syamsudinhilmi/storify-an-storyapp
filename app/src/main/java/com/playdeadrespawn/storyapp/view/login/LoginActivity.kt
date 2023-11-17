@@ -8,19 +8,19 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.playdeadrespawn.storyapp.data.pref.UserModel
-import com.playdeadrespawn.storyapp.data.pref.UserPreference
-import com.playdeadrespawn.storyapp.data.pref.dataStore
+import com.playdeadrespawn.storyapp.R
 import com.playdeadrespawn.storyapp.databinding.ActivityLoginBinding
 import com.playdeadrespawn.storyapp.view.AuthViewModel
 import com.playdeadrespawn.storyapp.view.ViewModelFactory
 import com.playdeadrespawn.storyapp.view.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var viewModel: AuthViewModel
+    private val viewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,21 +45,6 @@ class LoginActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[AuthViewModel::class.java]
-
-        viewModel.let {
-            it.login.observe(this) {login->
-                it.saveSession(
-                    UserModel(
-                        login.loginResult.name,
-                        login.loginResult.token,
-                        login.loginResult.userId)
-                )
-            }
-        }
     }
 
     private fun setupAction() {
@@ -71,26 +56,50 @@ class LoginActivity : AppCompatActivity() {
 
             when {
                 email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = "Email tidak boleh kosong"
+                    binding.emailEditTextLayout.error = getString(R.string.email_tidak_boleh_kosong)
                     showLoading(false)
                 }
+
+                password.isEmpty() -> {
+                    binding.passwordEditTextLayout.error = getString(R.string.empty_password)
+                    showLoading(false)
+                }
+
                 else -> {
-                    viewModel.loginSession(email, password)
-                    viewModel.loading.observe(this) {
-                        showLoading(it)
-                        if (!it) {
+                    viewModel.loginSession(email, password).observe(this) {
+                        val data = it.loginResult
+                        if (data != null && !it.error) {
+                            viewModel.saveSession(data.name, data.userId, data.token)
+                            showLoading(false)
                             AlertDialog.Builder(this@LoginActivity).apply {
-                                setTitle("Login Gagal")
-                                setMessage("Email atau password tidak sesuai. Coba ulangi lagi!.")
-                                setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                                setTitle(getString(R.string.selamat))
+                                setMessage(getString(R.string.succes_login))
+                                setPositiveButton("Lanjut") { _, _ ->
+                                    val intent = Intent(context, MainActivity::class.java)
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                create()
                                 show()
+
                             }
+                        }
+                        if (it.message == "400") {
+                            showLoading(false)
+                            AlertDialog.Builder(this@LoginActivity)
+                                .setTitle(getString(R.string.error_login))
+                                .setMessage(getString(R.string.error_email))
+                                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                                .show()
                         }
                     }
                 }
             }
         }
     }
+
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
@@ -98,8 +107,10 @@ class LoginActivity : AppCompatActivity() {
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        val email = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(300)
-        val password = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(300)
+        val email =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(300)
+        val password =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(300)
 
         val sequence = AnimatorSet().apply {
             playSequentially(email, password)
@@ -109,29 +120,11 @@ class LoginActivity : AppCompatActivity() {
             start()
         }
     }
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.loadingIndicator.visibility = View.VISIBLE
-        } else {
-            binding.loadingIndicator.visibility = View.GONE
 
-            viewModel.login.observe(this) {
-                if (!it.error) {
-                    AlertDialog.Builder(this@LoginActivity).apply {
-                        setTitle("Selamat!")
-                        setMessage("Anda berhasil login. Silahkan menggunakan aplikasi ini.")
-                        setPositiveButton("Lanjut") { _, _ ->
-                            val intent = Intent(context, MainActivity::class.java)
-                            intent.flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
-                        }
-                        create()
-                        show()
-                    }
-                }
-            }
-        }
+    private fun showLoading(isLoading: Boolean) = if (isLoading) {
+        binding.loadingIndicator.visibility = View.VISIBLE
+    } else {
+        binding.loadingIndicator.visibility = View.GONE
+
     }
 }

@@ -3,17 +3,16 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:id="@+id/settings"
-		android:icon="@drawable/ic_menu"
-		app:showAsAction="always"
-		android:title="">
+		android:id="@+id/map"
+		android:title="@string/map"
+		app:showAsAction="ifRoom"
+		android:icon="@drawable/ic_map" />
 
-		<menu>
-			<item
-				android:id="@+id/logout"
-				android:title="@string/logout"
-				app:showAsAction="never"/>
-		</menu>
+	<item
+		android:id="@+id/logout"
+		android:title="@string/logout"
+		app:showAsAction="never" />
 
-	</item>
+
+
 </menu>
