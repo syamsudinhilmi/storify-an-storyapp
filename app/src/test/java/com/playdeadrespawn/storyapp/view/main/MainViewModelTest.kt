@@ -54,7 +54,6 @@ class MainViewModelTest {
         testDispatcher.cleanupTestCoroutines()
     }
 
-
     @Test
     fun `When Get Story with Location`() {
         val expectStories = MutableLiveData<StoryResponse>()
