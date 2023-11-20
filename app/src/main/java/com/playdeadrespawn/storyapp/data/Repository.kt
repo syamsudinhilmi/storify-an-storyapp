@@ -8,6 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.playdeadrespawn.storyapp.data.api.ApiService
+import com.playdeadrespawn.storyapp.data.database.StoryDatabase
 import com.playdeadrespawn.storyapp.data.pref.UserPreference
 import com.playdeadrespawn.storyapp.data.response.AddNewStoryResponse
 import com.playdeadrespawn.storyapp.data.response.ListStoryItem
@@ -22,6 +23,7 @@ class Repository(
     private val apiService: ApiService,
     private val preference: UserPreference,
     private val remoteData: RemoteData,
+    private val storyDatabase: StoryDatabase
 ) : DataSource {
 
     override  fun getSession(): LiveData<LoginResult> {
@@ -108,9 +110,10 @@ class Repository(
             apiService: ApiService,
             pref: UserPreference,
             remoteDataSource: RemoteData,
+            storyDatabase: StoryDatabase
         ): Repository =
             instance ?: synchronized(this) {
-                instance ?: Repository(apiService, pref, remoteDataSource)
+                instance ?: Repository(apiService, pref, remoteDataSource, storyDatabase)
             }.also { instance = it }
     }
 }

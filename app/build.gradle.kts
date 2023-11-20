@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -17,6 +17,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -26,6 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "MAPS_API_KEYS","\"AIzaSyC-7YyAgFLS_dNivvNwl-lraJgzsu19nSc\"")
         }
     }
     buildFeatures {
@@ -38,6 +40,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += ("-opt-in=kotlin.RequiresOptIn")
+
+    }
+    testOptions {
+        animationsDisabled = true
+        unitTests.isReturnDefaultValues = true
     }
 
 }
@@ -47,6 +55,7 @@ dependencies {
     val lifeCycle = "2.6.2"
     val gms = "18.2.0"
     val coroutine = "1.7.1"
+
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -90,6 +99,6 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.4.0")
     testImplementation("org.mockito:mockito-inline:4.4.0")
 
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    kapt("androidx.room:room-compiler:2.6.0")
 
 }

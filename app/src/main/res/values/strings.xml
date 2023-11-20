@@ -59,5 +59,6 @@
 	<string name="style_parsing_failed">Style parsing failed.</string>
 	<string name="can_t_find_style_error">"Can't find style. Error: "</string>
 	<string name="empty_password">Password tidak boleh kosong!\n</string>
+	<string name="maps_api_key">AIzaSyC-7YyAgFLS_dNivvNwl-lraJgzsu19nSc</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.playdeadrespawn.storyapp.data.response
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class StoryResponse(
@@ -33,6 +34,7 @@ data class ListStoryItem(
 	@field:SerializedName("lon")
 	val lon: Double,
 
+	@PrimaryKey
 	@field:SerializedName("id")
 	val id: String,
 
